@@ -109,11 +109,11 @@ export default function GeneralPhysicianPage() {
   return (
     <>
       <Header />
-      <main className="max-w-[1440px] mx-auto flex bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-8 pl-8">
+      <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-2 pl-2 md:pr-8 md:pl-8">
         {/* Sidebar Filters */}
-        <aside className="w-[270px] border-r border-gray-200 bg-white py-8 px-6 flex-shrink-0 flex flex-col justify-between min-h-[calc(100vh-120px)]">
+        <aside className="w-full lg:w-[270px] border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-[calc(100vh-120px)] mb-6 lg:mb-0">
           <div>
-            <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-6 py-2 rounded font-semibold mb-6">Add Doctor</button>
+            <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold mb-6">Add Doctor</button>
             <div className="flex items-center justify-between mb-6">
               <span className="text-lg font-semibold text-gray-900">Filters</span>
               <button className="text-blue-600 text-sm font-semibold hover:underline" onClick={() => setFilters({ location: '', minExperience: '', maxFee: '', language: '' })}>Clear All</button>
@@ -156,7 +156,7 @@ export default function GeneralPhysicianPage() {
           </div>
         </aside>
         {/* Main Content */}
-        <section className="flex-1 px-10 py-8">
+        <section className="flex-1 px-2 py-4 md:px-10 md:py-8">
           <nav className="text-xs text-gray-500 mb-2 flex items-center gap-1">
             <span className="hover:underline cursor-pointer">Home</span>
             <span className="mx-1">›</span>
@@ -183,13 +183,13 @@ export default function GeneralPhysicianPage() {
               <div className="text-center text-gray-500 py-8">No doctors found.</div>
             )}
             {doctors.map((doc, idx) => (
-              <div key={doc._id} className="flex items-center bg-white rounded-xl border border-gray-200 shadow-sm px-6 py-5 relative">
+              <div key={doc._id} className="flex flex-col sm:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 relative">
                 {/* Doctor of the Hour badge - moved above card */}
                 {idx === 0 && (
                   <span className="absolute -top-4 right-8 bg-[#b68c2a] text-white font-bold px-4 py-1 rounded text-xs tracking-wide shadow-lg z-20">DOCTOR OF THE HOUR</span>
                 )}
-                <img src={doc.image || 'https://www.apollo247.com/images/doctors/doctor-default.png'} alt={doc.name} className="w-20 h-20 rounded object-cover border border-gray-200" />
-                <div className="ml-6 flex-1">
+                <img src={doc.image || 'https://www.apollo247.com/images/doctors/doctor-default.png'} alt={doc.name} className="w-20 h-20 rounded object-cover border border-gray-200 mb-4 sm:mb-0" />
+                <div className="sm:ml-6 flex-1 w-full text-center sm:text-left">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold text-lg text-gray-900">{doc.name}</span>
                   </div>
@@ -198,7 +198,7 @@ export default function GeneralPhysicianPage() {
                   <div className="text-gray-500 text-xs">{doc.location}</div>
                   <div className="text-gray-500 text-xs">{doc.languages && doc.languages.join(', ')}</div>
                 </div>
-                <div className="flex flex-col items-end min-w-[220px]">
+                <div className="flex flex-col items-center sm:items-end min-w-[180px] md:min-w-[220px] mt-4 sm:mt-0 w-full sm:w-auto">
                   <span className="font-bold text-2xl text-gray-900 mb-2">₹{doc.fee}</span>
                   <button className="w-full border-2 border-[#0096ff] text-[#0096ff] font-semibold rounded-lg px-8 py-2 bg-white hover:bg-blue-50 transition">Consult Online</button>
                 </div>
@@ -207,14 +207,14 @@ export default function GeneralPhysicianPage() {
           </div>
         </section>
         {/* Help Section */}
-        <aside className="w-[300px] flex flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl ml-8 mt-16 h-fit" style={{marginRight: 24}}>
+        <aside className="hidden xl:flex w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl ml-8 mt-16 h-fit" style={{marginRight: 24}}>
           <img src="https://www.apollo247.com/images/doctors/doctor-default.png" alt="Help" className="w-24 h-24 rounded-full object-cover mb-4" />
           <div className="text-white text-lg font-semibold mb-2 text-center">Need help consult the right doctor?</div>
           <a href="#" className="text-blue-200 underline text-base font-medium text-center">Call +91-8040245807 to book instantly</a>
         </aside>
       </main>
       {/* Info + Related Links and FAQ Section Below Main Content */}
-      <section className="max-w-[1100px] mx-auto bg-white rounded-xl shadow p-8 mt-10 mb-10 text-gray-900">
+      <section className="max-w-[1100px] mx-auto bg-white rounded-xl shadow p-4 md:p-8 mt-6 md:mt-10 mb-6 md:mb-10 text-gray-900">
         <h2 className="font-bold text-lg mb-2">Book Consult for General Medicine Online</h2>
         <p className="mb-4">Booking an appointment with a top general physician (GP) is now easier than ever with <b>Apollo 24|7</b>. Our experienced doctors provide comprehensive care for a wide range of medical conditions, including <b>fever</b>, <b>allergies</b>, and diabetes. You can conveniently schedule an online general physician consultation or visit a trusted hospital/clinic near you. Our allergies doctor and diabetes doctor offer flexible appointment slots to suit your needs. With transparent general physician fees and genuine general physician reviews, you can make an informed decision when choosing your healthcare provider. Take charge of your health today by booking a doctor near your location by searching the phrase general physician near me.</p>
         <h3 className="font-bold mb-2">What is General Medicine?</h3>
@@ -276,8 +276,8 @@ export default function GeneralPhysicianPage() {
         </div>
       </section>
       {/* Footer Section */}
-      <footer className="w-full bg-[#fafbfc] border-t border-gray-200 py-10">
-        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between px-8 gap-8">
+      <footer className="w-full bg-[#fafbfc] border-t border-gray-200 py-8 md:py-10">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-8 gap-8">
           {/* Logo */}
           <div className="flex flex-col items-center md:items-start">
             <img src="https://newassets.apollo247.com/images/ic_logo.png" alt="Apollo 24/7" className="h-12 w-auto mb-2" />
