@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceBtn {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px) scale(1.05); }
+}
+
+.fade-in {
+  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.bounce-btn:hover {
+  animation: bounceBtn 0.4s;
+}
+
+.card-glow:hover {
+  box-shadow: 0 8px 32px 0 rgba(34, 197, 94, 0.15), 0 1.5px 6px 0 rgba(59, 130, 246, 0.10);
+  border-color: #2563eb;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+/* Smooth form pop-in */
+.form-pop {
+  animation: fadeIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
