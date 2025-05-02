@@ -111,7 +111,7 @@ export default function GeneralPhysicianPage() {
       <Header />
       <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-2 pl-2 md:pr-8 md:pl-8">
         {/* Sidebar Filters */}
-        <aside className="w-full lg:w-[270px] border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-fit mb-6 lg:mb-0">
+        <aside className="w-full lg:w-[270px] border-b lg:border-b-0 lg:border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-fit mb-6 lg:mb-0">
           <div>
             <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold mb-6">Add Doctor</button>
             <div className="flex items-center justify-between mb-6">
@@ -183,7 +183,7 @@ export default function GeneralPhysicianPage() {
               <div className="text-center text-gray-500 py-8">No doctors found.</div>
             )}
             {doctors.map((doc, idx) => (
-              <div key={doc._id} className="flex flex-col sm:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 relative">
+              <div key={doc._id} className="flex flex-col sm:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 relative w-full">
                 {/* Doctor of the Hour badge - moved above card */}
                 {idx === 0 && (
                   <span className="absolute -top-4 right-8 bg-[#b68c2a] text-white font-bold px-4 py-1 rounded text-xs tracking-wide shadow-lg z-20">DOCTOR OF THE HOUR</span>
@@ -207,7 +207,7 @@ export default function GeneralPhysicianPage() {
           </div>
         </section>
         {/* Help Section */}
-        <aside className="hidden lg:flex w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl ml-8 mt-16 h-fit" style={{marginRight: 24}}>
+        <aside className="hidden lg:flex w-full lg:w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl lg:ml-8 mt-8 lg:mt-16 h-fit" style={{marginRight: 0}}>
           <img src="https://www.apollo247.com/images/doctors/doctor-default.png" alt="Help" className="w-24 h-24 rounded-full object-cover mb-4" />
           <div className="text-white text-lg font-semibold mb-2 text-center">Need help consult the right doctor?</div>
           <a href="#" className="text-blue-200 underline text-base font-medium text-center">Call +91-8040245807 to book instantly</a>
