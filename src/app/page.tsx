@@ -20,10 +20,15 @@ interface FilterParams {
   minExperience?: string;
   maxFee?: string;
   language?: string;
+  page?: string;
+  limit?: string;
 }
 
 export default function GeneralPhysicianPage() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDoctors, setTotalDoctors] = useState(0);
   const [filters, setFilters] = useState({
     location: '',
     minExperience: '',
@@ -44,33 +49,54 @@ export default function GeneralPhysicianPage() {
 
   useEffect(() => {
     const checkAndSeed = async () => {
-      const res = await fetch('http://localhost:4000/api/doctors');
+      const res = await fetch('/api/doctors');
       const data = await res.json();
-      // Only seed if doctors array exists and is empty
       if (data && Array.isArray(data.doctors) && data.doctors.length === 0) {
-        await fetch('http://localhost:4000/api/doctors/seed', { method: 'POST' });
+        await fetch('/api/doctors/seed', { method: 'POST' });
         await fetchDoctors();
       } else if (data && Array.isArray(data.doctors)) {
         setDoctors(data.doctors);
+        if (data.total) {
+          setTotalDoctors(data.total);
+          setTotalPages(Math.ceil(data.total / 5));
+        }
       } else if (Array.isArray(data)) {
         setDoctors(data);
+        setTotalPages(Math.ceil(data.length / 5));
+        setTotalDoctors(data.length);
       } else {
         setDoctors([]);
+        setTotalPages(1);
+        setTotalDoctors(0);
       }
     };
     checkAndSeed();
   }, []);
 
   const fetchDoctors = async (filterParams: FilterParams = {}) => {
-    const params = new URLSearchParams(filterParams as Record<string, string>).toString();
-    const res = await fetch(`http://localhost:4000/api/doctors?${params}`);
+    const params = new URLSearchParams({
+      ...filterParams,
+      page: currentPage.toString(),
+      limit: '5' // Show 5 doctors per page
+    } as Record<string, string>).toString();
+
+    const res = await fetch(`/api/doctors?${params}`);
     const data = await res.json();
+
     if (data && Array.isArray(data.doctors)) {
       setDoctors(data.doctors);
+      if (data.total) {
+        setTotalDoctors(data.total);
+        setTotalPages(Math.ceil(data.total / 5));
+      }
     } else if (Array.isArray(data)) {
       setDoctors(data);
+      setTotalPages(Math.ceil(data.length / 5));
+      setTotalDoctors(data.length);
     } else {
       setDoctors([]);
+      setTotalPages(1);
+      setTotalDoctors(0);
     }
   };
 
@@ -80,7 +106,8 @@ export default function GeneralPhysicianPage() {
 
   const handleFilterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetchDoctors(filters);
+    setCurrentPage(1); // Reset to first page when filters change
+    fetchDoctors({ ...filters, page: '1' });
   };
 
   const handleAddDoctorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +116,7 @@ export default function GeneralPhysicianPage() {
 
   const handleAddDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
-    await fetch('http://localhost:4000/api/doctors', {
+    await fetch('/api/doctors', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -102,15 +129,18 @@ export default function GeneralPhysicianPage() {
     });
     setShowAddForm(false);
     setNewDoctor({ name: '', specialty: '', experience: '', location: '', rating: '', image: '', languages: '', fee: '' });
-    // Always fetch first page with no filters to show the new doctor
     fetchDoctors();
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    fetchDoctors(filters);
   };
 
   return (
     <>
       <Header />
       <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-2 pl-2 md:pr-8 md:pl-8">
-        {/* Sidebar Filters */}
         <aside className="w-full lg:w-[270px] border-b lg:border-b-0 lg:border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-fit mb-6 lg:mb-0">
           <div>
             <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold mb-6">Add Doctor</button>
@@ -155,7 +185,6 @@ export default function GeneralPhysicianPage() {
             </form>
           </div>
         </aside>
-        {/* Main Content */}
         <section className="flex-1 px-2 py-4 md:px-10 md:py-8 min-w-0">
           <nav className="text-xs text-gray-500 mb-2 flex items-center gap-1">
             <span className="hover:underline cursor-pointer">Home</span>
@@ -167,7 +196,7 @@ export default function GeneralPhysicianPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 leading-tight mb-1">Consult General Physicians Online - Internal Medicine Specialists</h1>
-              <div className="text-gray-600 text-base">(762 doctors)</div>
+              <div className="text-gray-600 text-base">({totalDoctors} doctors)</div>
             </div>
             <div>
               <button className="flex items-center border border-gray-300 rounded px-4 py-2 text-gray-700 font-semibold text-base bg-white hover:bg-gray-50">
@@ -177,14 +206,12 @@ export default function GeneralPhysicianPage() {
               </button>
             </div>
           </div>
-          {/* Doctor Cards */}
           <div className="flex flex-col gap-6">
             {doctors.length === 0 && (
               <div className="text-center text-gray-500 py-8">No doctors found.</div>
             )}
             {doctors.map((doc, idx) => (
               <div key={doc._id} className="flex flex-col sm:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 relative w-full">
-                {/* Doctor of the Hour badge - moved above card */}
                 {idx === 0 && (
                   <span className="absolute -top-4 right-8 bg-[#b68c2a] text-white font-bold px-4 py-1 rounded text-xs tracking-wide shadow-lg z-20">DOCTOR OF THE HOUR</span>
                 )}
@@ -204,16 +231,45 @@ export default function GeneralPhysicianPage() {
                 </div>
               </div>
             ))}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-2 mt-8">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-4 py-2 rounded-lg ${
+                      currentPage === page
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </section>
-        {/* Help Section */}
         <aside className="hidden lg:flex w-full lg:w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl lg:ml-8 mt-8 lg:mt-16 h-fit" style={{marginRight: 0}}>
           <img src="https://www.apollo247.com/images/doctors/doctor-default.png" alt="Help" className="w-24 h-24 rounded-full object-cover mb-4" />
           <div className="text-white text-lg font-semibold mb-2 text-center">Need help consult the right doctor?</div>
           <a href="#" className="text-blue-200 underline text-base font-medium text-center">Call +91-8040245807 to book instantly</a>
         </aside>
       </main>
-      {/* Info + Related Links and FAQ Section Below Main Content */}
       <section className="max-w-[1100px] mx-auto bg-white rounded-xl shadow p-4 md:p-8 mt-6 md:mt-10 mb-6 md:mb-10 text-gray-900">
         <h2 className="font-bold text-lg mb-2">Book Consult for General Medicine Online</h2>
         <p className="mb-4">Booking an appointment with a top general physician (GP) is now easier than ever with <b>Apollo 24|7</b>. Our experienced doctors provide comprehensive care for a wide range of medical conditions, including <b>fever</b>, <b>allergies</b>, and diabetes. You can conveniently schedule an online general physician consultation or visit a trusted hospital/clinic near you. Our allergies doctor and diabetes doctor offer flexible appointment slots to suit your needs. With transparent general physician fees and genuine general physician reviews, you can make an informed decision when choosing your healthcare provider. Take charge of your health today by booking a doctor near your location by searching the phrase general physician near me.</p>
@@ -231,7 +287,6 @@ export default function GeneralPhysicianPage() {
           <li>Educating patients about their health conditions, treatment options, and self-care strategies to promote better health outcomes</li>
           <li>Collaborating with other healthcare professionals, such as specialists and nurses, to ensure comprehensive and coordinated patient care</li>
         </ul>
-        {/* Related Links and FAQ Section - merged, no gap */}
         <div className="mt-8">
           <div className="mb-8">
             <div className="flex flex-col gap-2">
@@ -275,14 +330,11 @@ export default function GeneralPhysicianPage() {
           </div>
         </div>
       </section>
-      {/* Footer Section */}
       <footer className="w-full bg-[#fafbfc] border-t border-gray-200 py-8 md:py-10">
         <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-8 gap-8">
-          {/* Logo */}
           <div className="flex flex-col items-center md:items-start">
             <img src="https://newassets.apollo247.com/images/ic_logo.png" alt="Apollo 24/7" className="h-12 w-auto mb-2" />
           </div>
-          {/* App Download */}
           <div className="flex flex-col items-center">
             <span className="font-bold text-base mb-2">Get Apollo Mobile App</span>
             <div className="flex gap-4">
@@ -294,7 +346,6 @@ export default function GeneralPhysicianPage() {
               </a>
             </div>
           </div>
-          {/* Social Links */}
           <div className="flex flex-col items-center md:items-end">
             <span className="font-bold text-base mb-2">Find Us</span>
             <div className="flex gap-4">
