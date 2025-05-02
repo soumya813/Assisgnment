@@ -111,7 +111,7 @@ export default function GeneralPhysicianPage() {
       <Header />
       <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-2 pl-2 md:pr-8 md:pl-8">
         {/* Sidebar Filters */}
-        <aside className="w-full lg:w-[270px] border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-[calc(100vh-120px)] mb-6 lg:mb-0">
+        <aside className="w-full lg:w-[270px] border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-fit mb-6 lg:mb-0">
           <div>
             <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold mb-6">Add Doctor</button>
             <div className="flex items-center justify-between mb-6">
@@ -156,7 +156,7 @@ export default function GeneralPhysicianPage() {
           </div>
         </aside>
         {/* Main Content */}
-        <section className="flex-1 px-2 py-4 md:px-10 md:py-8">
+        <section className="flex-1 px-2 py-4 md:px-10 md:py-8 min-w-0">
           <nav className="text-xs text-gray-500 mb-2 flex items-center gap-1">
             <span className="hover:underline cursor-pointer">Home</span>
             <span className="mx-1">›</span>
