@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
-import { FaUserMd, FaMapMarkerAlt, FaLanguage, FaStar, FaRegClock } from 'react-icons/fa';
 
 interface Doctor {
   _id: string;
@@ -14,6 +13,13 @@ interface Doctor {
   image: string;
   languages: string[];
   fee: number;
+}
+
+interface FilterParams {
+  location?: string;
+  minExperience?: string;
+  maxFee?: string;
+  language?: string;
 }
 
 export default function GeneralPhysicianPage() {
@@ -35,11 +41,9 @@ export default function GeneralPhysicianPage() {
     languages: '',
     fee: '',
   });
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const checkAndSeed = async () => {
-      setLoading(true);
       const res = await fetch('http://localhost:4000/api/doctors');
       const data = await res.json();
       // Only seed if doctors array exists and is empty
@@ -53,13 +57,12 @@ export default function GeneralPhysicianPage() {
       } else {
         setDoctors([]);
       }
-      setLoading(false);
     };
     checkAndSeed();
   }, []);
 
-  const fetchDoctors = async (filterParams = {}) => {
-    const params = new URLSearchParams(filterParams as any).toString();
+  const fetchDoctors = async (filterParams: FilterParams = {}) => {
+    const params = new URLSearchParams(filterParams as Record<string, string>).toString();
     const res = await fetch(`http://localhost:4000/api/doctors?${params}`);
     const data = await res.json();
     if (data && Array.isArray(data.doctors)) {
@@ -86,7 +89,6 @@ export default function GeneralPhysicianPage() {
 
   const handleAddDoctor = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     await fetch('http://localhost:4000/api/doctors', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -100,7 +102,6 @@ export default function GeneralPhysicianPage() {
     });
     setShowAddForm(false);
     setNewDoctor({ name: '', specialty: '', experience: '', location: '', rating: '', image: '', languages: '', fee: '' });
-    setLoading(false);
     // Always fetch first page with no filters to show the new doctor
     fetchDoctors();
   };
