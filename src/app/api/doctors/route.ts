@@ -6,7 +6,10 @@ import { Doctor } from '../../../models/Doctor';
 const connectDB = async () => {
   try {
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/doctors');
+      if (!process.env.MONGODB_URI) {
+        throw new Error('MONGODB_URI is not defined in environment variables');
+      }
+      await mongoose.connect(process.env.MONGODB_URI);
       console.log('MongoDB connected');
     }
   } catch (error) {
