@@ -207,7 +207,7 @@ export default function GeneralPhysicianPage() {
           </div>
         </section>
         {/* Help Section */}
-        <aside className="hidden xl:flex w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl ml-8 mt-16 h-fit" style={{marginRight: 24}}>
+        <aside className="hidden lg:flex w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl ml-8 mt-16 h-fit" style={{marginRight: 24}}>
           <img src="https://www.apollo247.com/images/doctors/doctor-default.png" alt="Help" className="w-24 h-24 rounded-full object-cover mb-4" />
           <div className="text-white text-lg font-semibold mb-2 text-center">Need help consult the right doctor?</div>
           <a href="#" className="text-blue-200 underline text-base font-medium text-center">Call +91-8040245807 to book instantly</a>
