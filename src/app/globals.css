@@ -29,3 +29,26 @@
 .form-pop {
   animation: fadeIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
 }
+
+/* Sidebar and Help Section Enhancements */
+@media (min-width: 1024px) {
+  aside[aria-label="Sidebar"], aside[aria-label="Help"] {
+    min-width: 260px;
+    max-width: 320px;
+  }
+}
+
+/* Doctor Card Badge Animation */
+@keyframes badgePop {
+  0% { transform: scale(0.7); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.animate-badge-pop {
+  animation: badgePop 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
