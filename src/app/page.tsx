@@ -75,24 +75,19 @@ export default function GeneralPhysicianPage() {
 
   const fetchDoctors = async (filterParams: FilterParams = {}) => {
     const params = new URLSearchParams({
-      ...filterParams,
-      page: currentPage.toString(),
-      limit: '5' // Show 5 doctors per page
-    } as Record<string, string>).toString();
+      ...filters, // Use current filters
+      ...filterParams, // Override with any new filter params
+      page: filterParams.page || currentPage.toString(),
+      limit: '5'
+    }).toString();
 
     const res = await fetch(`/api/doctors?${params}`);
     const data = await res.json();
 
     if (data && Array.isArray(data.doctors)) {
       setDoctors(data.doctors);
-      if (data.total) {
-        setTotalDoctors(data.total);
-        setTotalPages(Math.ceil(data.total / 5));
-      }
-    } else if (Array.isArray(data)) {
-      setDoctors(data);
-      setTotalPages(Math.ceil(data.length / 5));
-      setTotalDoctors(data.length);
+      setTotalDoctors(data.total);
+      setTotalPages(Math.ceil(data.total / 5));
     } else {
       setDoctors([]);
       setTotalPages(1);
@@ -134,7 +129,7 @@ export default function GeneralPhysicianPage() {
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-    fetchDoctors(filters);
+    fetchDoctors({ page: newPage.toString() });
   };
 
   return (

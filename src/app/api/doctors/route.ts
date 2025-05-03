@@ -28,21 +28,32 @@ export async function GET(request: Request) {
     const minExperience = searchParams.get('minExperience');
     const maxFee = searchParams.get('maxFee');
     const language = searchParams.get('language');
-    const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 10;
+    const page = Math.max(1, Number(searchParams.get('page')) || 1);
+    const limit = Number(searchParams.get('limit')) || 5;
 
     let filter: any = {};
     if (specialty) filter.specialty = specialty;
-    if (location) filter.location = location;
+    if (location) filter.location = { $regex: location, $options: 'i' };
     if (minExperience) filter.experience = { $gte: Number(minExperience) };
     if (maxFee) filter.fee = { $lte: Number(maxFee) };
-    if (language) filter.languages = language;
+    if (language) filter.languages = { $regex: language, $options: 'i' };
 
-    const skip = (page - 1) * limit;
     const total = await Doctor.countDocuments(filter);
-    const doctors = await Doctor.find(filter).skip(skip).limit(limit);
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+    
+    const doctors = await Doctor.find(filter)
+      .sort({ rating: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    return NextResponse.json({ total, page, limit, doctors });
+    return NextResponse.json({ 
+      doctors,
+      page,
+      limit,
+      total,
+      totalPages
+    });
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

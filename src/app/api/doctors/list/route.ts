@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     
     const { searchParams } = new URL(request.url);
     const page = Number(searchParams.get('page')) || 1;
-    const limit = Number(searchParams.get('limit')) || 10;
+    const limit = Number(searchParams.get('limit')) || 5;  // Default to 5 items per page
     const skip = (page - 1) * limit;
 
     const total = await Doctor.countDocuments();
@@ -37,7 +37,8 @@ export async function GET(request: Request) {
         totalPages,
         totalDoctors: total,
         hasNextPage: page < totalPages,
-        hasPrevPage: page > 1
+        hasPrevPage: page > 1,
+        limit
       }
     });
   } catch (error) {
