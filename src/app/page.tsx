@@ -135,8 +135,9 @@ export default function GeneralPhysicianPage() {
   return (
     <>
       <Header />
-      <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] pr-2 pl-2 md:pr-8 md:pl-8">
-        <aside className="w-full lg:w-[270px] border-b lg:border-b-0 lg:border-r border-gray-200 bg-white py-6 px-4 md:py-8 md:px-6 flex-shrink-0 flex flex-col justify-between min-h-fit mb-6 lg:mb-0">
+      <main className="max-w-[1440px] mx-auto flex flex-col lg:flex-row bg-[#fafbfc] min-h-[calc(100vh-120px)] px-4 md:px-6 lg:px-8">
+        {/* Filters Sidebar */}
+        <aside className="w-full lg:w-[270px] border-b lg:border-b-0 lg:border-r border-gray-200 bg-white py-4 md:py-6 px-4 flex-shrink-0 flex flex-col min-h-fit mb-4 lg:mb-0 rounded-lg lg:rounded-none">
           <div>
             <button type="button" onClick={() => setShowAddForm(true)} className="w-full bg-green-700 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold mb-6">Add Doctor</button>
             <div className="flex items-center justify-between mb-6">
@@ -180,38 +181,45 @@ export default function GeneralPhysicianPage() {
             </form>
           </div>
         </aside>
-        <section className="flex-1 px-2 py-4 md:px-10 md:py-8 min-w-0">
-          <nav className="text-xs text-gray-500 mb-2 flex items-center gap-1">
+
+        {/* Main Content Section */}
+        <section className="flex-1 px-0 md:px-6 lg:px-8 py-4 md:py-6 min-w-0">
+          {/* Breadcrumbs */}
+          <nav className="text-xs md:text-sm text-gray-500 mb-4 flex items-center gap-1 overflow-x-auto">
             <span className="hover:underline cursor-pointer">Home</span>
             <span className="mx-1">›</span>
             <span className="hover:underline cursor-pointer">Doctors</span>
             <span className="mx-1">›</span>
             <span className="text-blue-700 font-semibold">General Physicians</span>
           </nav>
-          <div className="flex items-center justify-between mb-6">
+
+          {/* Title Section */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 leading-tight mb-1">Consult General Physicians Online - Internal Medicine Specialists</h1>
-              <div className="text-gray-600 text-base">({totalDoctors} doctors)</div>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-1">Consult General Physicians Online - Internal Medicine Specialists</h1>
+              <div className="text-gray-600 text-sm md:text-base">({totalDoctors} doctors)</div>
             </div>
-            <div>
-              <button className="flex items-center border border-gray-300 rounded px-4 py-2 text-gray-700 font-semibold text-base bg-white hover:bg-gray-50">
+            <div className="flex-shrink-0">
+              <button className="w-full md:w-auto flex items-center justify-center border border-gray-300 rounded px-3 md:px-4 py-2 text-gray-700 font-semibold text-sm md:text-base bg-white hover:bg-gray-50">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16 17l-4 4m0 0l-4-4m4 4V3" /></svg>
                 Relevance
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
               </button>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
+
+          {/* Doctor Cards */}
+          <div className="flex flex-col gap-4 md:gap-6">
             {doctors.length === 0 && (
               <div className="text-center text-gray-500 py-8">No doctors found.</div>
             )}
             {doctors.map((doc, idx) => (
               <div key={doc._id} className="flex flex-col sm:flex-row items-center bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-4 md:px-6 md:py-5 relative w-full">
                 {idx === 0 && (
-                  <span className="absolute -top-4 right-8 bg-[#b68c2a] text-white font-bold px-4 py-1 rounded text-xs tracking-wide shadow-lg z-20">DOCTOR OF THE HOUR</span>
+                  <span className="absolute -top-3 md:-top-4 right-4 md:right-8 bg-[#b68c2a] text-white font-bold px-3 md:px-4 py-1 rounded text-xs tracking-wide shadow-lg z-20">DOCTOR OF THE HOUR</span>
                 )}
-                <img src={doc.image || 'https://www.apollo247.com/images/doctors/doctor-default.png'} alt={doc.name} className="w-20 h-20 rounded object-cover border border-gray-200 mb-4 sm:mb-0" />
-                <div className="sm:ml-6 flex-1 w-full text-center sm:text-left">
+                <img src={doc.image || 'https://www.apollo247.com/images/doctors/doctor-default.png'} alt={doc.name} className="w-16 h-16 md:w-20 md:h-20 rounded object-cover border border-gray-200 mb-4 sm:mb-0" />
+                <div className="sm:ml-4 md:ml-6 flex-1 w-full text-center sm:text-left">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-bold text-lg text-gray-900">{doc.name}</span>
                   </div>
@@ -220,52 +228,56 @@ export default function GeneralPhysicianPage() {
                   <div className="text-gray-500 text-xs">{doc.location}</div>
                   <div className="text-gray-500 text-xs">{doc.languages && doc.languages.join(', ')}</div>
                 </div>
-                <div className="flex flex-col items-center sm:items-end min-w-[180px] md:min-w-[220px] mt-4 sm:mt-0 w-full sm:w-auto">
-                  <span className="font-bold text-2xl text-gray-900 mb-2">₹{doc.fee}</span>
-                  <button className="w-full border-2 border-[#0096ff] text-[#0096ff] font-semibold rounded-lg px-8 py-2 bg-white hover:bg-blue-50 transition">Consult Online</button>
+                <div className="flex flex-col items-center sm:items-end min-w-[160px] md:min-w-[200px] mt-4 sm:mt-0 w-full sm:w-auto">
+                  <span className="font-bold text-xl md:text-2xl text-gray-900 mb-2">₹{doc.fee}</span>
+                  <button className="w-full border-2 border-[#0096ff] text-[#0096ff] font-semibold rounded-lg px-4 md:px-8 py-2 bg-white hover:bg-blue-50 transition text-sm md:text-base">Consult Online</button>
                 </div>
               </div>
             ))}
-            {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-8">
-                <button
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                >
-                  Previous
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePageChange(page)}
-                    className={`px-4 py-2 rounded-lg ${
-                      currentPage === page
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-                <button
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-                >
-                  Next
-                </button>
-              </div>
-            )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-6 md:mt-8 overflow-x-auto py-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Previous
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={`px-4 py-2 rounded-lg ${
+                    currentPage === page
+                      ? 'bg-blue-600 text-white'
+                      : 'border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </section>
-        <aside className="hidden lg:flex w-full lg:w-[300px] flex-col items-center justify-center px-6 py-8 bg-[#00214d] rounded-xl lg:ml-8 mt-8 lg:mt-16 h-fit" style={{marginRight: 0}}>
+
+        {/* Help Section */}
+        <aside className="hidden lg:flex w-full lg:w-[300px] flex-col items-center justify-center px-4 md:px-6 py-6 md:py-8 bg-[#00214d] rounded-xl lg:ml-8 mt-4 lg:mt-0 h-fit">
           <img src="https://www.apollo247.com/images/doctors/doctor-default.png" alt="Help" className="w-24 h-24 rounded-full object-cover mb-4" />
           <div className="text-white text-lg font-semibold mb-2 text-center">Need help consult the right doctor?</div>
           <a href="#" className="text-blue-200 underline text-base font-medium text-center">Call +91-8040245807 to book instantly</a>
         </aside>
       </main>
-      <section className="max-w-[1100px] mx-auto bg-white rounded-xl shadow p-4 md:p-8 mt-6 md:mt-10 mb-6 md:mb-10 text-gray-900">
+      <section className="max-w-[1100px] mx-4 md:mx-auto bg-white rounded-xl shadow px-4 py-6 md:p-8 mt-6 md:mt-10 mb-6 md:mb-10 text-gray-900">
         <h2 className="font-bold text-lg mb-2">Book Consult for General Medicine Online</h2>
         <p className="mb-4">Booking an appointment with a top general physician (GP) is now easier than ever with <b>Apollo 24|7</b>. Our experienced doctors provide comprehensive care for a wide range of medical conditions, including <b>fever</b>, <b>allergies</b>, and diabetes. You can conveniently schedule an online general physician consultation or visit a trusted hospital/clinic near you. Our allergies doctor and diabetes doctor offer flexible appointment slots to suit your needs. With transparent general physician fees and genuine general physician reviews, you can make an informed decision when choosing your healthcare provider. Take charge of your health today by booking a doctor near your location by searching the phrase general physician near me.</p>
         <h3 className="font-bold mb-2">What is General Medicine?</h3>
@@ -284,9 +296,9 @@ export default function GeneralPhysicianPage() {
         </ul>
         <div className="mt-8">
           <div className="mb-8">
-            <div className="flex flex-col gap-2">
-              <a href="#" className="font-semibold text-black hover:underline flex items-center gap-1">General Physician/ Internal Medicine Specialists Available for online consults <svg className="w-4 h-4 inline text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 3h7v7m0 0L10 21l-7-7L21 10z" /></svg></a>
-              <a href="#" className="font-semibold text-black hover:underline flex items-center gap-1">Female General Physician/ Internal Medicine Specialists in top cities <svg className="w-4 h-4 inline text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 3h7v7m0 0L10 21l-7-7L21 10z" /></svg></a>
+            <div className="flex flex-col gap-3 md:gap-2">
+              <a href="#" className="font-semibold text-black hover:underline flex items-center gap-1 text-sm md:text-base">General Physician/ Internal Medicine Specialists Available for online consults <svg className="w-4 h-4 inline text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 3h7v7m0 0L10 21l-7-7L21 10z" /></svg></a>
+              <a href="#" className="font-semibold text-black hover:underline flex items-center gap-1 text-sm md:text-base">Female General Physician/ Internal Medicine Specialists in top cities <svg className="w-4 h-4 inline text-blue-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 3h7v7m0 0L10 21l-7-7L21 10z" /></svg></a>
               <div className="flex items-center gap-1">
                 <span className="font-semibold text-black">General Physician/ Internal Medicine Specialists in top cities</span>
                 <svg className="w-4 h-4 text-gray-700 cursor-pointer" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
@@ -316,38 +328,46 @@ export default function GeneralPhysicianPage() {
                 'How often should I visit my general physician for check-ups?',
                 'What are the qualifications required to become a general physician in India?'
               ].map((faq, i) => (
-                <div key={i} className="flex items-center justify-between py-3 cursor-pointer hover:bg-gray-50">
-                  <span>{faq}</span>
-                  <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                <div key={i} className="flex items-center justify-between py-3 cursor-pointer hover:bg-gray-50 px-2 md:px-4 text-sm md:text-base gap-4">
+                  <span className="flex-1">{faq}</span>
+                  <svg className="w-5 h-5 text-gray-700 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </section>
-      <footer className="w-full bg-[#fafbfc] border-t border-gray-200 py-8 md:py-10">
-        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-8 gap-8">
+      <footer className="w-full bg-[#fafbfc] border-t border-gray-200 py-6 md:py-10">
+        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-8 gap-6 md:gap-8">
           <div className="flex flex-col items-center md:items-start">
-            <img src="https://newassets.apollo247.com/images/ic_logo.png" alt="Apollo 24/7" className="h-12 w-auto mb-2" />
+            <img src="https://newassets.apollo247.com/images/ic_logo.png" alt="Apollo 24/7" className="h-8 md:h-12 w-auto mb-2" />
           </div>
-          <div className="flex flex-col items-center">
-            <span className="font-bold text-base mb-2">Get Apollo Mobile App</span>
-            <div className="flex gap-4">
+          <div className="flex flex-col items-center order-last md:order-none">
+            <span className="font-bold text-sm md:text-base mb-2">Get Apollo Mobile App</span>
+            <div className="flex gap-3 md:gap-4">
               <a href="#" target="_blank" rel="noopener noreferrer">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-12 w-auto" />
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-8 md:h-12 w-auto" />
               </a>
               <a href="#" target="_blank" rel="noopener noreferrer">
-                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="h-12 w-auto" />
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" className="h-8 md:h-12 w-auto" />
               </a>
             </div>
           </div>
           <div className="flex flex-col items-center md:items-end">
-            <span className="font-bold text-base mb-2">Find Us</span>
-            <div className="flex gap-4">
-              <a href="#" aria-label="Facebook"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" className="h-10 w-10 rounded-full bg-[#4267B2] p-2" /></a>
-              <a href="#" aria-label="X"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" className="h-10 w-10 rounded-full bg-black p-2" /></a>
-              <a href="#" aria-label="LinkedIn"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" className="h-10 w-10 rounded-full bg-[#0077B5] p-2" /></a>
-              <a href="#" aria-label="YouTube"><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" className="h-10 w-10 rounded-full bg-[#FF0000] p-2" /></a>
+            <span className="font-bold text-sm md:text-base mb-2">Find Us</span>
+            <div className="flex gap-3 md:gap-4">
+              <a href="#" aria-label="Facebook" className="transform hover:scale-110 transition-transform">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-[#4267B2] p-2" />
+              </a>
+              <a href="#" aria-label="X" className="transform hover:scale-110 transition-transform">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/x.svg" alt="X" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-black p-2" />
+              </a>
+              <a href="#" aria-label="LinkedIn" className="transform hover:scale-110 transition-transform">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-[#0077B5] p-2" />
+              </a>
+              <a href="#" aria-label="YouTube" className="transform hover:scale-110 transition-transform">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" className="h-8 w-8 md:h-10 md:w-10 rounded-full bg-[#FF0000] p-2" />
+              </a>
             </div>
           </div>
         </div>
